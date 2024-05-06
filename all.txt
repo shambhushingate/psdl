@@ -1,0 +1,501 @@
+//1.addition
+
+#include <xc.h> 
+void main(void) { 
+static int i, sum,num1, num2; 
+num1 = ox02;
+num2 = oxo3;
+sum= num1 + num2;
+
+    TRISB=0; 
+    PORTB=sum; 
+return;
+}
+
+
+
+//2. addition array
+
+#include <xc.h>
+#define N 10
+void main(void) {
+ 
+ 
+int number[N]={0x01, 0x23, 0x34, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, ox22};  
+int i, sum = 0;
+for (i=0;i<=N;i++) 
+{ 
+sum=sum+number[i]; 
+    } 
+  	LATB=sum;
+	return;
+}
+
+
+
+// 3. source to dest
+
+void main(void) {
+int source1[] = { 0x21,0x22, 0x23, 0x24, 0x25 };
+int dest[] = {0x99, 0x99,0x99,0x99,0x99};
+int i,temp;
+for(i=0;i&lt;5;i++)
+{
+temp = source1[i];
+source1[i] = dest[i];
+dest[i] = temp;
+}
+return;
+}
+
+
+//4. multiplication division
+
+Procedure1: Multiply two hex 8 bit numbers:
+void main()
+{
+unsigned char num1, num2;
+unsigned int result;
+
+// Get input from user
+num1 = 0x12; // Example input value
+num2 = 0x34; // Example input value
+
+// Perform multiplication
+result = num1 * num2;
+
+// Display result
+PORTD = (unsigned char) result;
+}
+
+Procedure1: multiplying two 8-bit Hex numbers using successive addition method::
+void main()
+{
+unsigned char num1, num2;
+unsigned int result = 0;
+unsigned char i;
+
+// Get input from user
+num1 = 0x12; // Example input value
+num2 = 0x34; // Example input value
+
+// Perform multiplication using successive addition
+for(i = 0; i &lt; num2; i++)
+{
+result += num1;
+}
+
+// Display result
+PORTD = (unsigned char) result;
+PORTC = (unsigned char) (result &gt;&gt; 8);
+}
+
+Procedure2: Divide 8 bit number by 8 bit number :
+void main()
+{
+unsigned char num1, num2;
+unsigned char quotient;
+
+// Get input from user
+num1 = 0x78; // Example input value
+
+num2 = 0x12; // Example input value
+
+// Perform division
+quotient = num1 / num2;
+
+// Display quotient
+PORTD = quotient;
+}
+
+Procedure2: dividing two 8-bit hex numbers using successive subtraction method:
+
+void main()
+{
+unsigned char num1, num2;
+unsigned char quotient = 0;
+
+// Get input from user
+num1 = 0x78; // input value
+num2 = 0x12; // input value
+
+// Perform division using successive subtraction
+while(num1 &gt;= num2)
+{
+num1 -= num2;
+quotient++;
+}
+
+// Display quotient
+PORTD = quotient;
+}
+
+
+//5. acending order
+
+#include<xc.h>
+#include<stdint.h>
+
+void main(void) 
+{ 
+    
+    int arr[]={0x01, 0x09, 0x05, 0x07, 0x02};
+    int n=5;
+    int temp,i,j; 
+
+    for (i=0;i<n-1;i++) 
+    { 
+        for (j=0; j<n-i-1; j++) 
+        { 
+            if(arr[j] < arr[j+1]) 
+            { 
+                temp=arr[j]; 
+                arr[j]=arr[j+1]; 
+                arr[j+1]=temp; 
+            } 
+        } 
+    }
+	return; 
+} 
+
+
+
+//6. LED
+
+#include <xc.h> //Include Controller specific .h
+//Configuration bit settings
+#pragma config OSC = HS //Oscillator Selection
+#pragma config WDT = OFF //Disable Watchdog timer
+#pragma config LVP = OFF //Disable Low Voltage Programming
+#pragma config PBADEN = OFF //Disable PORTB Analog inputs
+//Function Prototypes
+void msdelay (unsigned int time);//Function for delay
+//Start of Program Code
+void main()
+{
+INTCON2bits.RBPU=0;
+ADCON1 = 0x0F; //To disable the all analog inputs
+TRISD = 0x00; //To configure PORTD as output
+while (1) //While loop for repeated operation
+{
+PORTD = 0xFF; //Turn ON the all LED’s
+msdelay(250); // Delay
+PORTD = 0x00; //Turn OFF the all LED’s
+msdelay(250); // Delay
+}
+} //End of the Program
+//Function Definition for delay degeneration
+void msdelay (unsigned int time)
+{
+unsigned int i, j;
+for (i = 0; i < time; i++)
+for (j = 0; j < 710; j++); //Calibrated for a 1 ms delay in MPLAB
+}
+
+
+//7. BUZZER
+
+
+#include <xc.h> //Include Controller specific .h
+//Configuration bits setting
+#pragma config OSC = HS 
+#pragma config WDT = OFF 
+#pragma config LVP = OFF 
+#pragma config PBADEN = OFF 
+
+void __interrupt () timer0_isr (void)
+{
+TMR0H = 0X85; 
+TMR0L = 0XEE;
+PORTBbits.RB3 = ~PORTBbits.RB3; 
+INTCONbits.TMR0IF = 0; 
+}
+
+void main()
+{
+ADCON1 = 0x0F; 
+TRISBbits.TRISB3 = 0; 
+PORTBbits.RB3 = 0; 
+T0CON = 0x02;
+TMR0H = 0x85; 
+TMR0L = 0xEE;
+INTCONbits.TMR0IF =0; 
+INTCONbits.TMR0IE =1; 
+T0CONbits.TMR0ON = 1; 
+INTCONbits.GIE = 1; 
+while(1);
+}
+
+
+
+//8. relay
+
+
+#include <xc.h>
+#pragma config OSC = HS //Oscillator Selection
+#pragma config WDT = OFF //Disable Watchdog timer
+#pragma config LVP = OFF //Disable Low Voltage Programming
+#pragma config PBADEN = OFF //Disable PORTB Analog inputs
+void __interrupt(high_priority) switch_isr (void)
+{
+PORTBbits.RB2 = ~PORTBbits.RB2; //Toggle the RB2
+INTCONbits.INT0IF=0; //Reset the interrupt flag
+}
+void main()
+
+ADCON1 = 0x0F; // Configuring PORT pins as digital I/O
+TRISBbits.TRISB2 = 0; // Configuring the RB2 as output
+PORTBbits.RB2 = 0; // Setting the initial value
+TRISBbits.TRISB0=1; // Make INT0 pin as an input pin
+INTCON2=0x00; // Interrupt detection on falling Edge
+INTCONbits.INT0IF=0; // Clear INT0IF flag
+INTCONbits.INT0IE=1; // Enable INT0 external interrupt
+INTCONbits.GIE=1; // Enable Global Interrupt
+while(1);
+}
+
+
+//9. LCD
+
+
+
+// PIC18F4550 Configuration Bit Settings
+ // 'C' source line config statements
+ // CONFIG1L
+ #pragma config PLLDIV = 1
+ input drives PLL directly))
+ // PLL Prescaler Selection bits (No prescale (4 MHz oscillator
+ #pragma config CPUDIV = OSC1_PLL2// System Clock Postscaler Selection bits ([Primary
+ Oscillator Src: /1][96 MHz PLL Src: /2])
+ #pragma config USBDIV = 1
+ // USB Clock Selection bit (used in Full-Speed USB mode only;
+ UCFG:FSEN = 1) (USB clock source comes directly from the primary oscillator block with no
+ postscale)
+ // CONFIG1H
+ #pragma config FOSC = HS
+ // Oscillator Selection bits (HS oscillator (HS))
+ #pragma config FCMEN = OFF // Fail-Safe Clock Monitor Enable bit (Fail-Safe Clock Monitor
+ disabled)
+ #pragma config IESO = OFF
+ Switchover mode disabled)
+ // CONFIG2L
+ #pragma config PWRT = OFF
+ #pragma config BOR = ON
+ // Internal/External Oscillator Switchover bit (Oscillator
+ // Power-up Timer Enable bit (PWRT disabled)
+ // Brown-out Reset Enable bits (Brown-out Reset enabled in
+ hardware only (SBOREN is disabled))
+ #pragma config BORV = 3
+ // Brown-out Reset Voltage bits (Minimum setting 2.05V)
+ #pragma config VREGEN = OFF // USB Voltage Regulator Enable bit (USB voltage regulator
+ disabled)
+ // CONFIG2H
+ #pragma config WDT = OFF
+ on the SWDTEN bit))
+ // Watchdog Timer Enable bit (WDT disabled (control is placed
+ #pragma config WDTPS = 32768 // Watchdog Timer Postscale Select bits (1:32768)
+ // CONFIG3H
+ #pragma config CCP2MX = ON // CCP2 MUXbit (CCP2 input/output is multiplexed with
+ RC1)
+ #pragma config PBADEN = OFF // PORTB A/D Enable bit (PORTB<4:0> pins are configured
+ as digital I/O on Reset)
+ #pragma config LPT1OSC = OFF // Low-Power Timer 1 Oscillator Enable bit (Timer1
+ configured for higher power operation)
+ #pragma config MCLRE = ON
+ // MCLR Pin Enable bit (MCLR pin enabled; RE3 input pin
+ disabled)
+// CONFIG4L
+ #pragma config STVREN = ON // Stack Full/Underflow Reset Enable bit (Stack full/underflow
+ will cause Reset)
+ #pragma config LVP = OFF
+ // Single-Supply ICSP Enable bit (Single-Supply ICSP disabled)
+ #pragma config ICPRT = OFF // Dedicated In-Circuit Debug/Programming Port (ICPORT)
+ Enable bit (ICPORT disabled)
+ #pragma config XINST = OFF // Extended Instruction Set Enable bit (Instruction set
+ extension and Indexed Addressing mode disabled (Legacy mode))
+ // CONFIG5L
+ #pragma config CP0 = OFF
+ code-protected)
+ #pragma config CP1 = OFF
+ code-protected)
+ #pragma config CP2 = OFF
+ code-protected)
+ #pragma config CP3 = OFF
+ code-protected)
+ // CONFIG5H
+ #pragma config CPB = OFF
+ // Code Protection bit (Block 0 (000800-001FFFh) is not
+ // Code Protection bit (Block 1 (002000-003FFFh) is not
+ // Code Protection bit (Block 2 (004000-005FFFh) is not
+ // Code Protection bit (Block 3 (006000-007FFFh) is not
+ // Boot Block Code Protection bit (Boot block
+ (000000-0007FFh) is not code-protected)
+ #pragma config CPD = OFF
+ // Data EEPROM Code Protection bit (Data EEPROM is not
+ code-protected)
+ // CONFIG6L
+ #pragma config WRT0 = OFF
+ write-protected)
+ #pragma config WRT1 = OFF
+ write-protected)
+ #pragma config WRT2 = OFF
+ write-protected)
+ #pragma config WRT3 = OFF
+ write-protected)
+ // CONFIG6H
+ #pragma config WRTC = OFF
+ // Write Protection bit (Block 0 (000800-001FFFh) is not
+ // Write Protection bit (Block 1 (002000-003FFFh) is not
+ // Write Protection bit (Block 2 (004000-005FFFh) is not
+ // Write Protection bit (Block 3 (006000-007FFFh) is not
+ // Configuration Register Write Protection bit (Configuration
+ registers (300000-3000FFh) are not write-protected)
+ #pragma config WRTB = OFF
+ // Boot Block Write Protection bit (Boot block
+ (000000-0007FFh) is not write-protected)
+ #pragma config WRTD = OFF
+ // Data EEPROM Write Protection bit (Data EEPROM is not
+ write-protected)
+ // CONFIG7L
+#pragma config EBTR0 = OFF // Table Read Protection bit (Block 0 (000800-001FFFh) is not
+ protected from table reads executed in other blocks)
+ #pragma config EBTR1 = OFF // Table Read Protection bit (Block 1 (002000-003FFFh) is not
+ protected from table reads executed in other blocks)
+ #pragma config EBTR2 = OFF // Table Read Protection bit (Block 2 (004000-005FFFh) is not
+ protected from table reads executed in other blocks)
+ #pragma config EBTR3 = OFF // Table Read Protection bit (Block 3 (006000-007FFFh) is not
+ protected from table reads executed in other blocks)
+ // CONFIG7H
+ #pragma config EBTRB = OFF // Boot Block Table Read Protection bit (Boot block
+ (000000-0007FFh) is not protected from table reads executed in other blocks)
+ // #pragma config statements should precede project file includes.
+ // Use project enums instead of #define for ON and OFF.
+ #include <xc.h>
+ #define LCD_DATA PORTD //LCD data port to PORTD
+ #define ctrl PORTE //LCD control port to PORTE
+ #define rs PORTEbits.RE0 //register select signal to RE0
+ #define rw PORTEbits.RE1 //read/write signal to RE1
+ #define en PORTEbits.RE2 //enable signal to RE2
+ //Function Prototypes
+ void init_LCD(void); //Function to initialize the LCD
+ void LCD_command(unsigned char cmd);//Function to pass command to LCD
+ void LCD_data(unsigned char data); //Function to write char to LCD
+ void LCD_write_string( char *str);//Function to write string
+ void msdelay (unsigned int time); //Function to generate delay
+ //Start of Main Program
+ void main(void)
+ {
+ char var1[] = "hello";//Declare message to be displayed
+ char var2[] = "user";
+ ADCON1=0x0F; //Configuring the PORTE pins as digital I/O
+ TRISD = 0x00; //Configuring PORTD as output
+ TRISE = 0x00; //Configuring PORTE as output
+ init_LCD(); // call function to initialize of LCD
+ msdelay(50); // delay of 50 milliseconds
+ LCD_write_string(var1); //Display message on first line
+ msdelay(15);
+ LCD_command(0xC0); // initiate cursor to second line
+LCD_write_string(var2);//Display message on second line
+ while (1); //Loop here
+ } //End of Main
+ //Function Definitions
+ void msdelay (unsigned int time) //Function to generate delay
+ {
+ unsigned int i, j;
+ for (i = 0; i < time; i++)
+ for (j = 0; j < 710; j++);//Calibrated for a 1 ms delay in MPLAB
+ }
+ void init_LCD(void) // Function to initialize the LCD
+ {
+ LCD_command(0x38); // initialization of 16X2 LCD in 8bit mode
+ msdelay(15);
+ LCD_command(0x01); // clear LCD
+ msdelay(15);
+ LCD_command(0x0C); // cursor off
+ msdelay(15);
+ LCD_command(0x80); // go to first line and 0th position
+ msdelay(15);
+ }
+ void LCD_command(unsigned char cmd) //Function to pass command to LCD
+ {
+ LCD_DATA = cmd; //Send data on LCD data bus
+ rs = 0; //RS = 0 since command to LCD
+ rw = 0; //RW = 0 since writing to LCD
+ en = 1; //Generate High to low pulse on EN
+ msdelay(15);
+ en = 0;
+ }
+ void LCD_data(unsigned char data)//Function to write data to the LCD
+ {
+ LCD_DATA = data; //Send data on LCD data bus
+ rs = 1; //RS = 1 since data to LCD
+ rw = 0; //RW = 0 since writing to LCD
+ en = 1; //Generate High to low pulse on EN
+ msdelay(15);
+ en = 0;
+ }
+ //Function to write string to LCD
+ void LCD_write_string(char *str)
+ {
+ int i = 0;
+ while (str[i] != 0) //Check for end of the string
+{
+ LCD_data(str[i]); // sending data on LCD byte by byte
+ msdelay(15);
+ i++;
+ }
+ }
+
+
+//10. motor
+
+#include <xc.h> //Include Controller specific .h
+#pragma config OSC = HS //Oscillator Selection
+#pragma config WDT = OFF //Disable Watchdog timer
+#pragma config LVP = OFF //Disable Low Voltage Programming
+#pragma config PBADEN = OFF //Disable PORTB Analog inputs
+void myMsDelay (unsigned int time) // Definition of delay subroutine
+{
+unsigned int i, j;
+for (i = 0; i < time; i++) // Loop for time
+for (j = 0; j < 710; j++); // Calibrated for a 1 ms delay in MPLAB
+}
+void main()
+{
+TRISCbits.TRISC0 = 0; // Set PORTC, RC6 as output (DCM IN1)
+TRISCbits.TRISC1 = 0; // Set PORTC, RC6 as output (DCM IN2)
+
+TRISCbits.TRISC2 = 0; // Set PORTC, RC2 as output (CCP1)
+PR2 = 0x4E; // set PWM Frequency 4KHz
+CCP1CON = 0x0C; // Configure CCP1CON as PWM mode.
+T2CON = 0x07; // Start timer 2 with prescaler 1:16
+PORTCbits.RC0 = 1; // Turn ON the Motor
+PORTCbits.RC1 = 0;
+while(1) // Endless Loop
+{
+// ----------Duty Cycle 80%-----------
+CCP1CONbits.DC1B0 = 0;
+CCP1CONbits.DC1B1 = 1;
+CCPR1L = 0x3E;
+myMsDelay(2000);
+// ----------Duty Cycle 60%-----------
+CCP1CONbits.DC1B0 = 1;
+CCP1CONbits.DC1B1 = 1;
+CCPR1L = 0x2E;
+myMsDelay(2000);
+// ----------Duty Cycle 40%-----------
+CCP1CONbits.DC1B0 = 1;
+CCP1CONbits.DC1B1 = 0;
+CCPR1L = 0x1F;
+myMsDelay(2000);
+// ----------Duty Cycle 20%-----------
+CCP1CONbits.DC1B0 = 0;
+CCP1CONbits.DC1B1 = 1;
+CCPR1L = 0x0F;
+myMsDelay(2000);
+}
+}
+
+
+
+
